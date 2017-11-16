@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.58, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: e_commerce
+-- Host: localhost    Database: mydb
 -- ------------------------------------------------------
 -- Server version	5.5.58-0ubuntu0.14.04.1
 
@@ -29,10 +29,19 @@ CREATE TABLE `carts` (
   `product_quantity` int(11) DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated` datetime DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
   KEY `xyz` (`variant_id`),
+  KEY `x` (`order_id`),
+  KEY `b` (`user_id`),
+  KEY `d` (`product_id`),
+  CONSTRAINT `d` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `c` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `x` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `xyz` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +50,7 @@ CREATE TABLE `carts` (
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-INSERT INTO `carts` VALUES (1,1,1,1,1,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(2,3,3,2,2,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,2,2,1,3,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,4,4,4,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(5,1,1,3,5,'2017-11-13 00:00:00','2017-11-12 18:30:00');
+INSERT INTO `carts` VALUES (2,2,2,6,2,'2017-11-16 20:17:08','2017-11-16 20:17:08',2);
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,8 +87,18 @@ CREATE TABLE `order_history` (
   `product_quantity` int(11) DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` datetime DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `g` (`order_id`),
+  KEY `h` (`product_id`),
+  KEY `i` (`variant_id`),
+  KEY `j` (`user_id`),
+  CONSTRAINT `j` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `g` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `h` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `i` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +107,7 @@ CREATE TABLE `order_history` (
 
 LOCK TABLES `order_history` WRITE;
 /*!40000 ALTER TABLE `order_history` DISABLE KEYS */;
-INSERT INTO `order_history` VALUES (1,1,1,1,1,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(2,3,3,2,2,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,2,2,1,3,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,4,4,4,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(5,1,1,3,5,'2017-11-13 00:00:00','2017-11-12 18:30:00');
+INSERT INTO `order_history` VALUES (1,1,1,10,1,'2017-11-16 20:16:50','2017-11-16 20:16:50',1);
 /*!40000 ALTER TABLE `order_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,16 +119,18 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
-  `order_date` date DEFAULT NULL,
+  `order_date` datetime DEFAULT NULL,
   `order_status` varchar(20) DEFAULT NULL,
-  `final_cost` int(11) DEFAULT NULL,
-  `shipping_date` date DEFAULT NULL,
+  `final_cost` decimal(10,0) DEFAULT NULL,
+  `shipping_date` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `e` (`user_id`),
+  CONSTRAINT `e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +139,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,1,'2017-11-13','placed',50,'2017-12-13','2017-11-13 00:00:00','2017-11-12 18:30:00'),(2,2,'2017-11-13','placed',240,'2017-12-13','2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,3,'2017-11-13','placed',100,'2017-12-13','2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,'2017-11-13','placed',800,'2017-12-13','2017-11-13 00:00:00','2017-11-12 18:30:00'),(5,5,'2017-11-13','placed',150,'2017-12-13','2017-11-13 00:00:00','2017-11-12 18:30:00');
+INSERT INTO `orders` VALUES (1,1,'2017-11-16 20:11:17','placed',500,NULL,'2017-11-16 20:11:17','2017-11-16 20:11:17'),(2,2,'2017-11-16 20:14:14','placed',NULL,NULL,'2017-11-16 20:14:14','2017-11-16 20:14:14');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,17 +169,19 @@ DROP TABLE IF EXISTS `payments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) DEFAULT NULL,
   `payment_type` varchar(20) NOT NULL,
-  `discount_coupon` decimal(10,0) DEFAULT NULL,
+  `discount_coupon` int(11) DEFAULT NULL,
   `checkout_price` decimal(10,2) DEFAULT NULL,
-  `payment_date` date DEFAULT NULL,
+  `payment_date` datetime DEFAULT NULL,
   `payment_status` varchar(20) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `f` (`order_id`),
+  CONSTRAINT `f` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +190,6 @@ CREATE TABLE `payments` (
 
 LOCK TABLES `payments` WRITE;
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
-INSERT INTO `payments` VALUES (1,1,'cash',10,40.00,'0000-00-00','pending','2017-11-14 00:00:00','2017-11-14 15:53:30'),(2,2,'cash',0,240.00,'0000-00-00','pending','2017-11-14 00:00:00','2017-11-13 18:30:00');
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,12 +201,12 @@ DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `products` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(20) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,7 +227,7 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` varchar(20) DEFAULT NULL,
   `email` varchar(20) NOT NULL,
   `password` varchar(15) NOT NULL,
@@ -213,10 +235,10 @@ CREATE TABLE `users` (
   `contact` varchar(10) DEFAULT NULL,
   `address` varchar(20) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -237,15 +259,17 @@ DROP TABLE IF EXISTS `variants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `variants` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) DEFAULT NULL,
   `color_name` varchar(20) DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `a` (`product_id`),
+  CONSTRAINT `a` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -254,7 +278,7 @@ CREATE TABLE `variants` (
 
 LOCK TABLES `variants` WRITE;
 /*!40000 ALTER TABLE `variants` DISABLE KEYS */;
-INSERT INTO `variants` VALUES (1,1,'BLACK',3,50.00,'2017-11-13 00:00:00','2017-11-13 14:08:00'),(2,2,'RED',4,100.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,3,'BROWN',8,120.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,'BLUE',5,200.00,'2017-11-13 00:00:00','2017-11-12 18:30:00');
+INSERT INTO `variants` VALUES (1,1,'BLACK',80,50.00,'2017-11-13 00:00:00','2017-11-13 14:08:00'),(2,2,'RED',100,100.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,3,'BROWN',100,120.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,'BLUE',100,200.00,'2017-11-13 00:00:00','2017-11-12 18:30:00');
 /*!40000 ALTER TABLE `variants` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -305,4 +329,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-14 21:25:32
+-- Dump completed on 2017-11-16 21:03:01
