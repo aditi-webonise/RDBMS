@@ -16,7 +16,6 @@ START TRANSACTION;
 
 SELECT sum((carts.product_quantity * variants.price)) INTO total_sum FROM carts,variants WHERE carts.variant_id = variants.id AND carts.user_id = u_id;
 
-
 INSERT INTO orders(user_id,order_date,order_status,final_cost,shipping_date,created,updated) VALUES (u_id,now(),'placed',total_sum,now(),now(),now());
 
 SET discount = 5;
@@ -26,9 +25,7 @@ SELECT id INTO oid FROM orders WHERE orders.user_id = u_id;
 
 INSERT INTO payments (order_id, payment_type,discount_coupon,checkout_price,payment_date, payment_status, created, updated) VALUES (oid,'cash',discount,pay,now(),'pending',now(), now());
 
-
 UPDATE variants INNER JOIN carts INNER JOIN orders ON variants.id=carts.variant_id SET variants.stock=variants.stock - carts.product_quantity WHERE variants.id=carts.variant_id AND carts.order_id=orders.id AND orders.user_id=u_id;
-
 
 INSERT INTO order_history SELECT * FROM carts WHERE carts.user_id=u_id;
 
