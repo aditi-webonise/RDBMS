@@ -19,6 +19,7 @@
 -- Table structure for table `carts`
 --
 
+
 DROP TABLE IF EXISTS `carts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -45,7 +46,8 @@ CREATE TABLE `carts` (
 
 --
 -- Dumping data for table `carts`
---
+--0ubuntu0.14.04.1
+
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
