@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.58, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: mydb
+-- Host: localhost    Database: e_commerce
 -- ------------------------------------------------------
 -- Server version	5.5.58-0ubuntu0.14.04.1
 
@@ -39,9 +39,8 @@ CREATE TABLE `carts` (
   CONSTRAINT `d` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `b` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `c` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `x` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `xyz` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +49,6 @@ CREATE TABLE `carts` (
 
 LOCK TABLES `carts` WRITE;
 /*!40000 ALTER TABLE `carts` DISABLE KEYS */;
-INSERT INTO `carts` VALUES (2,2,2,6,2,'2017-11-16 20:17:08','2017-11-16 20:17:08',2);
 /*!40000 ALTER TABLE `carts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,11 +92,11 @@ CREATE TABLE `order_history` (
   KEY `h` (`product_id`),
   KEY `i` (`variant_id`),
   KEY `j` (`user_id`),
-  CONSTRAINT `j` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `g` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   CONSTRAINT `h` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `i` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  CONSTRAINT `i` FOREIGN KEY (`variant_id`) REFERENCES `variants` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `j` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +105,7 @@ CREATE TABLE `order_history` (
 
 LOCK TABLES `order_history` WRITE;
 /*!40000 ALTER TABLE `order_history` DISABLE KEYS */;
-INSERT INTO `order_history` VALUES (1,1,1,10,1,'2017-11-16 20:16:50','2017-11-16 20:16:50',1);
+INSERT INTO `order_history` VALUES (1,1,1,10,1,'2017-11-17 19:02:33','2017-11-17 19:02:33',1);
 /*!40000 ALTER TABLE `order_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +128,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`id`),
   KEY `e` (`user_id`),
   CONSTRAINT `e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +137,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,1,'2017-11-16 20:11:17','placed',500,NULL,'2017-11-16 20:11:17','2017-11-16 20:11:17'),(2,2,'2017-11-16 20:14:14','placed',NULL,NULL,'2017-11-16 20:14:14','2017-11-16 20:14:14');
+INSERT INTO `orders` VALUES (1,1,'2017-11-17 19:04:16','placed',500,'2017-11-17 19:04:16','2017-11-17 19:04:16','2017-11-17 19:04:16');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +179,7 @@ CREATE TABLE `payments` (
   PRIMARY KEY (`id`),
   KEY `f` (`order_id`),
   CONSTRAINT `f` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,6 +188,7 @@ CREATE TABLE `payments` (
 
 LOCK TABLES `payments` WRITE;
 /*!40000 ALTER TABLE `payments` DISABLE KEYS */;
+INSERT INTO `payments` VALUES (1,1,'cash',5,475.00,'2017-11-17 19:04:16','pending','2017-11-17 19:04:16','2017-11-17 19:04:16');
 /*!40000 ALTER TABLE `payments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +268,7 @@ CREATE TABLE `variants` (
   PRIMARY KEY (`id`),
   KEY `a` (`product_id`),
   CONSTRAINT `a` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +277,7 @@ CREATE TABLE `variants` (
 
 LOCK TABLES `variants` WRITE;
 /*!40000 ALTER TABLE `variants` DISABLE KEYS */;
-INSERT INTO `variants` VALUES (1,1,'BLACK',80,50.00,'2017-11-13 00:00:00','2017-11-13 14:08:00'),(2,2,'RED',100,100.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,3,'BROWN',100,120.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,'BLUE',100,200.00,'2017-11-13 00:00:00','2017-11-12 18:30:00');
+INSERT INTO `variants` VALUES (1,1,'BLACK',80,50.00,'2017-11-13 00:00:00','2017-11-13 14:08:00'),(2,2,'RED',100,100.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(3,3,'BROWN',100,120.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(4,4,'BLUE',100,200.00,'2017-11-13 00:00:00','2017-11-12 18:30:00'),(5,1,'GREEN',100,100.00,'2017-11-17 18:03:20','2017-11-17 18:03:20');
 /*!40000 ALTER TABLE `variants` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,4 +328,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-16 21:03:01
+-- Dump completed on 2017-11-17 19:10:30

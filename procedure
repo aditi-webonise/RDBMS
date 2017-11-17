@@ -14,23 +14,25 @@ DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET flag=1;
 
 START TRANSACTION;
 
-select sum((carts.product_quantity * variants.price)) into total_sum from carts,variants where carts.variant_id = variants.id and carts.user_id = u_id;
+SELECT sum((carts.product_quantity * variants.price)) INTO total_sum FROM carts,variants WHERE carts.variant_id = variants.id AND carts.user_id = u_id;
 
-update orders set final_cost = total_sum where orders.user_id = u_id;
 
-set discount = 5;
-set pay= total_sum-((total_sum*discount)/100);
+INSERT INTO orders(user_id,order_date,order_status,final_cost,shipping_date,created,updated) VALUES (u_id,now(),'placed',total_sum,now(),now(),now());
 
-select id into oid from orders where orders.user_id = u_id;
+SET discount = 5;
+SET pay= total_sum-((total_sum*discount)/100);
+
+SELECT id INTO oid FROM orders WHERE orders.user_id = u_id;
 
 INSERT INTO payments (order_id, payment_type,discount_coupon,checkout_price,payment_date, payment_status, created, updated) VALUES (oid,'cash',discount,pay,now(),'pending',now(), now());
 
 
-update variants inner join carts inner join orders on variants.id=carts.variant_id set variants.stock=variants.stock - carts.product_quantity where variants.id=carts.variant_id and carts.order_id=orders.id and orders.user_id=u_id;
+UPDATE variants INNER JOIN carts INNER JOIN orders ON variants.id=carts.variant_id SET variants.stock=variants.stock - carts.product_quantity WHERE variants.id=carts.variant_id AND carts.order_id=orders.id AND orders.user_id=u_id;
 
 
 INSERT INTO order_history SELECT * FROM carts WHERE carts.user_id=u_id;
-DELETE from carts where carts.user_id=u_id ;
+
+DELETE FROM carts WHERE carts.user_id=u_id ;
 
 IF flag THEN
 	ROLLBACK;
